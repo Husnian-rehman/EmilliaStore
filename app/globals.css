@@ -21,6 +21,32 @@
 
 body {
   background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+/* banner css start here */
+.banner  .swiper-button-prev,
+.banner  .swiper-button-next {
+display: none;
+}
+.banner  .swiper-pagination-bullet{
+  background: transparent !important;
+  border: 2px solid #fff !important;
+    margin: 0 10px  !important;
+    border-radius: 6px;
+    opacity: 1 !important;
+}
+.banner .swiper-pagination-bullet-active {
+    background: transparent !important;
+    width: 25px;
+    border: 2px solid #fff !important;
+    border-radius: 6px;
+}
+.banner .swiper-pagination {
+    max-width: 1500px;
+    text-align: left;
+    margin: 0 auto;
+    bottom: 22px !important;
+    left: 0;
+    right: 0;
+    padding: 0 15px !important;
 }

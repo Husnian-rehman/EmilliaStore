@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Header } from "../component/Header";
+import { sanityClient } from "@/lib/sanity";
+import { HeaderProps } from "@/types";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -11,6 +14,32 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+  const headerDataRaw: Partial<HeaderProps> | null = await sanityClient.fetch(`
+    *[_type == "header"][0]{
+      logo,
+      menus[]{
+        title,
+        items[]{
+          title,
+          megaContent[]{
+            links[]{title, url},
+            featuredProduct{
+              title,
+              price,
+              image
+            }
+          }
+        }
+      },
+      rightLinks[]{title, url, icon}
+    }
+  `);
+
+  const headerData: HeaderProps = {
+    logo: headerDataRaw?.logo ?? null,
+    menus: headerDataRaw?.menus ?? [],
+    rightLinks: headerDataRaw?.rightLinks ?? [],
+  };
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -27,6 +56,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+           {/* Header */}
+        <Header {...headerData} />
         {children}
       </body>
     </html>
