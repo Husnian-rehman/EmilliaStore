@@ -24,13 +24,17 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
       return sections.some((section: any) => (section?.links?.length ?? 0) > 0 || Boolean(section?.featuredProduct))
     })
   }
+
+  // treat URLs starting with http(s)://, //, mailto:, tel: as external
+  const isExternalUrl = (url?: string) =>
+    !!url && /^(https?:\/\/|\/\/|mailto:|tel:)/i.test(url)
   
   return (
-    <header className=" shadow-sm relative z-50 !fixed w-full top-[10px] left-0">
-      <div className="max-w-[1460px] bg-white  relative mx-auto flex items-center rounded-[10px] justify-between px-5">
+    <header className="px-5 shadow-sm relative z-50 !fixed w-full top-[10px] left-0">
+      <div className="max-w-[1460px] bg-white  relative mx-auto flex items-center lg:flex-row flex-row-reverse rounded-[10px] justify-between px-5 lg:py-0 py-3">
 
         {/* Hamburger Mobile */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="focus:outline-none"
@@ -56,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
 
 
         {/* Left Menu (Desktop) */}
-        <nav className="hidden md:flex gap-5 ">
+        <nav className="hidden lg:flex gap-5 ">
           {menus.map((menu) => (
             <div key={menu.title ?? Math.random()} className="group">
               <span className="main-menu font-semibold cursor-pointer text-black flex items-center justify-center gap-1  py-7 px-2">
@@ -78,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
 
               {/* Mega Menu — render only when there is content */}
               {menuHasContent(menu) && (
-                <div className="mega-menu-desktop absolute left-0 rounded-[10px] h-[500px] top-[65px] mt-2 w-full bg-white shadow-lg opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity z-50 p-6 md:p-10 grid grid-cols-4 gap-6">
+                <div className="mega-menu-desktop absolute left-0 rounded-[10px] h-[500px] top-[65px] mt-2 w-full bg-white shadow-lg opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-all duration-700 ease-in-out z-50 p-6 md:p-10 grid grid-cols-4 gap-6">
                     {menu.items?.map((item) => {
 
                        // ONLY SHOW IF item.title exists
@@ -95,9 +99,15 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
                                 {section.links?.map((link: any) => (
                                   <li key={link.title ?? Math.random()}>
                                     {link?.url ? (
-                                      <Link href={link.url} className="text-[16px] text-gray-600 hover:text-black">
-                                        {link.title}
-                                      </Link>
+                                      isExternalUrl(link.url) ? (
+                                        <a href={link.url} className="text-[16px] text-gray-600 hover:text-black" target="_blank" rel="noopener noreferrer">
+                                          {link.title}
+                                        </a>
+                                      ) : (
+                                        <Link href={link.url} className="text-[16px] text-gray-600 hover:text-black">
+                                          {link.title}
+                                        </Link>
+                                      )
                                     ) : (
                                       <span className="text-[16px] text-gray-600">{link.title}</span>
                                     )}
@@ -134,32 +144,41 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
         
 
         {/* Right Links */}
-        <div className="hidden md:flex space-x-4">
-          {rightLinks.map((link) =>
-            link.url ? (
-              <Link key={link.title ?? Math.random()} href={link.url}>
-                {link.icon ? (
+        <div className="hidden lg:flex space-x-4">
+          {rightLinks.map((link) => {
+            const key = link.title ?? Math.random()
+            if (link?.url) {
+              return isExternalUrl(link.url) ? (
+                <a key={key} href={link.url} className="flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+                  {link.icon && (
+                    <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
+                  )}
+                  <span>{link.title}</span>
+                </a>
+              ) : (
+                <Link key={key} href={link.url} className="flex items-center gap-2">
+                  {link.icon && (
+                    <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
+                  )}
+                  <span>{link.title}</span>
+                </Link>
+              )
+            }
+            return (
+              <div key={key} className="flex items-center gap-2">
+                {link.icon && (
                   <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
-                ) : (
-                  <span className="sr-only">{link.title}</span>
                 )}
-              </Link>
-            ) : (
-              <div key={link.title ?? Math.random()} className="flex items-center">
-                {link.icon ? (
-                  <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
-                ) : (
-                  <span className="sr-only">{link.title}</span>
-                )}
+                <span>{link.title}</span>
               </div>
             )
-          )}
+          })}
         </div>
       </div>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-lg mega-menu-mobile absolute top-full left-0 w-full z-40">
+        <div className="lg:hidden bg-white shadow-lg mega-menu-mobile absolute top-full rounded-[10px] left-0 w-full z-40">
           <nav className="flex flex-col space-y-2 p-4">
             {menus?.map((menu) => (
               <div key={menu.title ?? Math.random()}>
@@ -188,9 +207,15 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
                                 {section.links?.map((link: any) => (
                                   <li key={link.title ?? Math.random()}>
                                     {link?.url ? (
-                                      <Link href={link.url} className="text-sm text-gray-600 hover:text-black">
-                                        {link.title}
-                                      </Link>
+                                      isExternalUrl(link.url) ? (
+                                        <a href={link.url} className="text-sm text-gray-600 hover:text-black" target="_blank" rel="noopener noreferrer">
+                                          {link.title}
+                                        </a>
+                                      ) : (
+                                        <Link href={link.url} className="text-sm text-gray-600 hover:text-black">
+                                          {link.title}
+                                        </Link>
+                                      )
                                     ) : (
                                       <span className="text-sm text-gray-600">{link.title}</span>
                                     )}
@@ -229,20 +254,27 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
             <div className="flex space-x-4 mt-4">
               {rightLinks?.map((link) =>
                 link?.url ? (
-                  <Link key={link.title ?? Math.random()} href={link.url}>
-                    {link.icon ? (
-                      <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
-                    ) : (
-                      <span className="sr-only">{link.title}</span>
-                    )}
-                  </Link>
+                  isExternalUrl(link.url) ? (
+                    <a key={link.title ?? Math.random()} href={link.url} className="flex items-center gap-2" target="_blank" rel="noopener noreferrer">
+                      {link.icon && (
+                        <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
+                      )}
+                      <span>{link.title}</span>
+                    </a>
+                  ) : (
+                    <Link key={link.title ?? Math.random()} href={link.url} className="flex items-center gap-2">
+                      {link.icon && (
+                        <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
+                      )}
+                      <span>{link.title}</span>
+                    </Link>
+                  )
                 ) : (
-                  <div key={link.title ?? Math.random()} className="flex items-center">
-                    {link.icon ? (
+                  <div key={link.title ?? Math.random()} className="flex items-center gap-2">
+                    {link.icon && (
                       <Image src={urlForImage(link.icon).url()} alt={link.title} width={24} height={24} />
-                    ) : (
-                      <span className="sr-only">{link.title}</span>
                     )}
+                    <span>{link.title}</span>
                   </div>
                 )
               )}

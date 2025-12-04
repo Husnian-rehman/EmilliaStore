@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Header } from "../component/Header";
+import { HeaderWrapper } from "../component/HeaderWrapper";
 import { sanityClient } from "@/lib/sanity";
 import { HeaderProps } from "@/types";
 import "./globals.css";
@@ -57,7 +57,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
            {/* Header */}
-        <Header {...headerData} />
+        <HeaderWrapper {...headerData} />
         {children}
       </body>
     </html>

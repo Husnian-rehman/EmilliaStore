@@ -12,37 +12,56 @@ const structure: StructureResolver = (S) =>
             .title("Global Settings")
             .items([
               S.documentTypeListItem("header").title("Header"),
-              S.documentTypeListItem("banner").title("Banner"),
+             
             ])
         ),
 
       // ========== HOME PAGE (ONLY FEATURED COLLECTION) ==========
-      // S.listItem()
-      //   .id("home-page-sections")
-      //   .title("Home Page")
-      //   .child(
-      //     S.list()
-      //       .title("Home Page Sections")
-      //       .items([
-      //         S.documentTypeListItem("featuredCollectionSection").title(
-      //           "Featured Collection Section"
-      //         ),
-      //         S.documentTypeListItem("tabsSection").title("Tabs Section"),
-      //         S.documentTypeListItem("collectionSection").title("Collection Section"),
-      //       ])
-      //   ),
+      S.listItem()
+        .id("home-page-sections")
+        .title("Home Page")
+        .child(
+          S.list()
+            .title("Home Page Sections")
+            .items([
+               S.documentTypeListItem("banner").title("Banner"),
+                S.documentTypeListItem("cardSection").title("Card Section"),
+                S.documentTypeListItem("faqSection").title("FAQ Section"),
+            ])
+        ),
 
-      // // ========== COLLECTION PAGE ==========
-      // S.listItem()
-      //   .title("Collection Page")
-      //   .child(
-      //     S.list()
-      //       .title("Collection Page Sections")
-      //       .items([
-      //         S.documentTypeListItem("collectionBanner").title("Collection Banner"),
-      //         // you can add other collection-specific sections here
-      //       ])
-      //   ),
+      // ========== CONTACT PAGE ==========
+      S.listItem()
+        .title("Contact Page")
+        .child(
+          S.list()
+            .title("Contact Page Sections")
+            .items([
+               S.documentTypeListItem("breadcrumbContact").title("Breadcrumb Contact Section"),
+            ])
+        ),
+
+        // =========== WISHLEST PAGE ==========
+        S.listItem()
+        .title("Wishlist Page")
+        .child(
+          S.list()
+            .title("Wishlist Page Sections")
+            .items([
+              S.documentTypeListItem("wishlistBreadcrumb").title("Wishlist Breadcrumb Section"),
+            ])
+        ),
+
+            // =========== WISHLEST PAGE ==========
+        S.listItem()
+        .title("Cart Page")
+        .child(
+          S.list()
+            .title("Cart Page Sections")
+            .items([
+                S.documentTypeListItem("cartBreadcrumb").title("Cart Breadcrumb Section"),
+            ])
+        ),
 
       // ========== OTHER DOCUMENTS (AUTO) ==========
       ...S.documentTypeListItems().filter(
@@ -51,6 +70,12 @@ const structure: StructureResolver = (S) =>
           ![
             "header",
             "banner",
+            "breadcrumbContact",
+            "cartBreadcrumb",
+            "wishlistBreadcrumb",
+            "cardSection",
+            "faqSection",
+
           ].includes(item.getId()!)
       ),
     ]);

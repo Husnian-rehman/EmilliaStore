@@ -54,7 +54,7 @@ export default defineType({
                                   type: 'object',
                                   fields: [
                                     { name: 'title', type: 'string', title: 'Link Title' },
-                                    { name: 'url', type: 'url', title: 'Link URL' },
+                                    { name: 'url', type: 'string', title: 'Link URL' },
                                   ],
                                 },
                               ],
@@ -92,7 +92,7 @@ export default defineType({
           type: 'object',
           fields: [
             { name: 'title', type: 'string' },
-            { name: 'url', type: 'url' },
+            { name: 'url', type: 'string' },
             { name: 'icon', type: 'image', options: { hotspot: true } },
           ],
         },
