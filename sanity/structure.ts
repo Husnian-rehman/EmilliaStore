@@ -12,7 +12,8 @@ const structure: StructureResolver = (S) =>
             .title("Global Settings")
             .items([
               S.documentTypeListItem("header").title("Header"),
-             
+               S.documentTypeListItem("footer").title("Footer"),
+              S.documentTypeListItem("popup").title("Newsletter Popup"),
             ])
         ),
 
@@ -26,7 +27,33 @@ const structure: StructureResolver = (S) =>
             .items([
                S.documentTypeListItem("banner").title("Banner"),
                 S.documentTypeListItem("cardSection").title("Card Section"),
+                S.documentTypeListItem("services").title("Services Section"),
                 S.documentTypeListItem("faqSection").title("FAQ Section"),
+                S.documentTypeListItem("aboutUsSection").title("About Us Section"),
+            
+            ])
+        ),
+
+        // ========== About PAGE ==========
+      S.listItem()
+        .title("About Page")
+        .child(
+          S.list()
+            .title("About Page Sections")
+            .items([
+               S.documentTypeListItem("aboutbreadcrumb").title("About Breadcrumb Section"),
+                S.documentTypeListItem("aboutbanner").title("About Banner Section"),
+            ])
+        ),
+      
+           // ========== FAQ PAGE ==========
+      S.listItem()
+        .title("FAQ Page")
+        .child(
+          S.list()
+            .title("FAQ Page Sections")
+            .items([
+               S.documentTypeListItem("faqBreadcrumb").title("FAQ Breadcrumb Section"),
             ])
         ),
 
@@ -38,6 +65,7 @@ const structure: StructureResolver = (S) =>
             .title("Contact Page Sections")
             .items([
                S.documentTypeListItem("breadcrumbContact").title("Breadcrumb Contact Section"),
+                S.documentTypeListItem("contact").title("Contact Page Content"),
             ])
         ),
 
@@ -69,12 +97,21 @@ const structure: StructureResolver = (S) =>
           item.getId() !== undefined &&
           ![
             "header",
+            "footer",
             "banner",
             "breadcrumbContact",
             "cartBreadcrumb",
             "wishlistBreadcrumb",
             "cardSection",
             "faqSection",
+            "services",
+            "popup",
+            "contact",
+            "aboutbreadcrumb",
+            "aboutbanner",
+            "aboutUsSection",
+            "aboutDetailSection",
+            "faqBreadcrumb",
 
           ].includes(item.getId()!)
       ),

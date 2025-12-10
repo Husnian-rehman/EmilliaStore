@@ -1,3 +1,19 @@
+// popup file types.ts =======
+
+export type PopupType = {
+  _id: string;
+  title: string;
+  description: string;
+  emailPlaceholder: string;
+  buttonText: string;
+  checkboxText: string;
+  discountText: string;
+  image: {
+    url: string;
+    alt?: string;
+  };
+};
+
 // =======================
 // Header / Mega Menu Types
 // =======================
@@ -16,6 +32,7 @@ export interface MegaMenuItem {
 
 export interface Menu {
   title: string;
+  url?: string; // <--- add optional url here so code and types align
   items: MegaMenuItem[];
 }
 
@@ -53,6 +70,11 @@ export interface BreadcrumbContactType {
   heading: string;
   image: any; 
 }
+// faqBreadcrumb.types.ts=====
+export interface FaqBreadcrumbType {
+  heading: string;
+  image: string;
+}
 
 
 // cartBreadcrumb.types.ts
@@ -66,6 +88,7 @@ export interface WishlistBreadcrumbType {
   heading: string;
   image: any; 
 }
+
 
 
 // cardsection.types.ts
@@ -96,4 +119,111 @@ export interface FAQSection {
 }
 
 
-// =======================
+// footer type.ts=======================
+export interface FooterLink {
+  label: string;
+  url: string;
+}
+
+export interface FooterMenu {
+  title: string;
+  links: FooterLink[];
+}
+
+export interface FooterData {
+  logo?: string;
+  address?: string;
+  menus: FooterMenu[];
+  newsletterText?: string;
+  copyright?: string;
+}
+
+// services types.ts=======================
+export interface ServiceItem {
+  title: string;
+  description: string;
+  icon: string; // Sanity icon URL
+  link: string; // URL from Sanity
+  btnText: string; // Dynamic button text
+}
+
+export interface ServiceCategory {
+  title: string;
+  slug: string;
+  services: ServiceItem[];
+}
+
+export interface ServicesData {
+  title?: string;
+  description?: string;
+  categories: ServiceCategory[];
+}
+
+// alias expected by page.tsx
+export type ServicesType = ServicesData;
+
+
+
+// contact types.ts=======================
+export interface SocialLink {
+  name: string;
+  icon: { asset: { url: string } };
+  url: string;
+}
+
+export interface ContactType {
+  formTitle: string;
+  formDescription: string;
+  namePlaceholder: string;
+  emailPlaceholder: string;
+  phonePlaceholder: string;
+  messagePlaceholder: string;
+  buttonText: string;
+
+  contactHeading: string;
+  address: string;
+  email: string;
+  phone: string;
+  openingTime: string;
+
+  socialLinks: SocialLink[];
+}
+
+// about page types.ts=======================
+
+  export interface AboutBreadcrumbType {
+    heading: string;
+    image: any;
+  }
+
+  // about banner types.ts=======================
+  export interface AboutBannerType {
+    title: string;
+    bannerImage: string;
+    bannerVideo: string;
+  }
+
+  //Aboutus type.ts =======================
+  export interface AboutUsType {
+    mainHeading: string;
+    leftImageOne: string;
+    leftImageTwo: string;
+    rightTitle: string;
+    rightDescription: string;
+    buttonText: string;
+    buttonLink: string;
+  }
+
+  // About Detail Section types.ts =======================
+  export interface AboutDetailType {
+  mainHeading: string;
+  leftImageOne: string;
+  leftImageTwo: string;
+  rightTitle: string;
+  rightDescription: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
+
+

@@ -56,7 +56,7 @@ export default function FAQAccordion({ data }: FAQAccordionProps) {
     <section className="py-30">
       <div className="max-w-[1300px] mx-auto px-5">
         <div className="mb-15">
-          <h2 className="text-[40px] text-center font-bold mb-3">{data.title}</h2>
+          <h2 className="text-4xl text-center font-bold mb-3">{data.title}</h2>
           {data.subtitle && <p className="text-gray-600 text-center">{data.subtitle}</p>}
         </div>
 
@@ -65,7 +65,7 @@ export default function FAQAccordion({ data }: FAQAccordionProps) {
             <div key={idx} className="border-b border-gray-300 pb-7">
               <button
                 onClick={() => toggle(idx)}
-                className="flex justify-between w-full text-left text-[15px] font-semibold uppercase"
+                className="flex justify-between w-full text-left text-[15px] cursor-pointer font-semibold uppercase"
               >
                 <span>{faq.question}</span>
                 <span className="text-xl">{openIndex === idx ? "−" : "+"}</span>

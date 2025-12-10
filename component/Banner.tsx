@@ -16,12 +16,12 @@ interface BannerSliderProps {
 const BannerSlider: React.FC<BannerSliderProps> = ({ banners }) => {
   return (
     <Swiper
-    className="banner"
+       className="banner"
       modules={[Navigation, Pagination, Autoplay]}
       navigation
       pagination={{ clickable: true }}
       loop
-      // autoplay={{ delay: 5000 }}
+      autoplay={{ delay: 5000 }}
     >
       {banners.map((banner) => (
         <SwiperSlide key={banner._id}>
@@ -31,7 +31,8 @@ const BannerSlider: React.FC<BannerSliderProps> = ({ banners }) => {
               backgroundImage: `url(${urlForImage(banner.image).url()})`,
             }}
           >
-            <div className="max-w-[1500px] mx-auto px-5 w-full">
+            <div className="absolute w-full h-full bg-[#00000070] z-[1] md:hidden "></div>
+            <div className="max-w-[1500px] mx-auto px-5 w-full z-[2] relative">
               <div className=" md:pb-50 pb-30 max-w-[520px] text-white rounded">
                   <h2 className="text-[16px] uppercase tracking-wider mb-[15px]">{banner.subtitle}</h2>
                   <h1 className="sm:text-[40px] text-[30px] sm:leading-[60px] leading-[50px] font-bold mb-[15px]">{banner.title}</h1>

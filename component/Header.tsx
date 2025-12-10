@@ -63,7 +63,10 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
         <nav className="hidden lg:flex gap-5 ">
           {menus.map((menu) => (
             <div key={menu.title ?? Math.random()} className="group">
-              <span className="main-menu font-semibold cursor-pointer text-black flex items-center justify-center gap-1  py-7 px-2">
+             <Link
+                  href={menu.url || "#"}
+                  className="main-menu font-semibold text-black flex items-center justify-center gap-1 py-7 px-2"
+                >
                   {menu.title}
                   {menuHasContent(menu) && (
                     <svg
@@ -78,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 9-7 7-7-7"/>
                     </svg>
                   )}
-                </span>
+                </Link>
 
               {/* Mega Menu — render only when there is content */}
               {menuHasContent(menu) && (
@@ -184,14 +187,27 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
               <div key={menu.title ?? Math.random()}>
                 <button
                   onClick={() => setOpenMegaMenu(openMegaMenu === menu.title ? null : menu.title)}
-                  className="w-full text-left font-semibold py-2"
+                  className="w-full text-left font-semibold py-2 flex items-center justify-between gap-1 text-black"
                 >
                   {menu.title}
+                  {menuHasContent(menu) && (
+                    <svg
+                      className="w-5 h-4 text-gray-800 dark:text-black"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 9-7 7-7-7"/>
+                    </svg>
+                  )}
                 </button>
 
                 {/* Render sections (same structure as desktop) */}
                 {openMegaMenu === menu.title && menuHasContent(menu) && (
-                  <div className="pl-4 pb-4">
+                  <div className=" pb-4 overflow-y-scroll h-[300px] text-center">
                     {menu.items?.map((item) => {
                         // Prevent rendering section without title — same as desktop
                        if (!item?.title) return null;
@@ -224,14 +240,14 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
                               </ul>
                                 {/* product card */}
                               {section.featuredProduct && (
-                                <div className="mt-2 flex items-start gap-3">
+                                <div className="mt-2 flex flex-col items-start gap-3">
                                   {section.featuredProduct.image && (
                                     <Image
                                       src={urlForImage(section.featuredProduct.image).url()}
                                       alt={section.featuredProduct.title ?? ''}
                                       width={80}
                                       height={80}
-                                      className="object-cover rounded"
+                                      className="object-cover rounded w-full"
                                     />
                                   )}
                                   <div>

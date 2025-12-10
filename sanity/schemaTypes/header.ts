@@ -23,7 +23,8 @@ export default defineType({
           name: 'menu',
           fields: [
             { name: 'title', type: 'string', title: 'Menu Title' },
-
+            { name: 'url', type: 'string', title: 'Link URL' },
+            
             {
               name: 'items',
               title: 'Menu Items',
@@ -36,7 +37,7 @@ export default defineType({
 
                     // --- This H4 title you show in UI ---
                     { name: 'title', type: 'string', title: 'Section Heading (H4 Title)' },
-
+                    
                     {
                       name: 'megaContent',
                       title: 'Menu + Product Blocks',

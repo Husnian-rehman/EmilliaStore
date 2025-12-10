@@ -6,8 +6,17 @@ import cartBreadcrumb from './cartBreadcrumb'
 import wishlistBreadcrumb from './wishlistBreadcrumb'
 import cardSection from './cardSection'
 import faqSection from './faqSection'
+import { footer } from './footer'
+import services from './services'
+import popup from './popup'
+import contact from './contact/contact'
+import aboutbreadcrumb from './about/aboutbreadcrumb'
+import aboutbanner from './about/aboutbanner'
+import aboutUsSection from './aboutus'
+import aboutDetailSection from './about/aboutdetail'
+import faqBreadcrumb from './faq/faqBreadcrumb'
 
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [header, banner, breadcrumbcontact, cartBreadcrumb, wishlistBreadcrumb, cardSection, faqSection], 
+  types: [contact, aboutDetailSection, aboutUsSection, aboutbreadcrumb,aboutbanner, popup, header, footer, banner, breadcrumbcontact, cartBreadcrumb, wishlistBreadcrumb, cardSection, faqSection,  faqBreadcrumb, services,], 
 }
