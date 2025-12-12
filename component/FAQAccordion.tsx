@@ -57,7 +57,7 @@ export default function FAQAccordion({ data }: FAQAccordionProps) {
       <div className="max-w-[1300px] mx-auto px-5">
         <div className="mb-15">
           <h2 className="text-4xl text-center font-bold mb-3">{data.title}</h2>
-          {data.subtitle && <p className="text-gray-600 text-center">{data.subtitle}</p>}
+          {data.subtitle && <p className="text-gray-600 text-center max-w-[1100px] mx-auto">{data.subtitle}</p>}
         </div>
 
         <div className="space-y-7">

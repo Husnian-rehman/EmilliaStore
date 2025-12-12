@@ -225,5 +225,34 @@ export interface ContactType {
   buttonLink: string;
 }
 
+// video types.ts=======================
+
+export interface VideoType {
+  videoUrl: string;
+  thumbnailUrl?: string;
+}
 
 
+// faqpage section types.ts=======================
+export interface FAQPageItem {
+  question: string;
+  answer: string;
+}
+
+export interface FAQPageSectionType {
+  _id: string;
+  title: string;
+  subtitle?: string;
+  faqs: FAQPageItem[];
+}
+
+// marquee bar types.ts=======================
+export interface MarqueeItem {
+  heading: string;
+  iconSvg: string; // raw SVG code
+}
+
+export interface MarqueeBarType {
+  items: MarqueeItem[];
+  speed?: number; // seconds it takes to scroll one full cycle (optional)
+}

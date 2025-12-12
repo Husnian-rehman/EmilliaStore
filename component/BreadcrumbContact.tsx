@@ -10,7 +10,7 @@ interface BreadcrumbContactProps {
 export default function BreadcrumbContact({ data, pageTitle }: BreadcrumbContactProps) {
   // hide when no data or no image
   if (!data) return null;
-  const imgUrl = data?.image?.asset?.url ?? null;
+  const imgUrl = typeof data?.image === 'string' ? data.image : data?.image?.asset?.url ?? null;
   if (!imgUrl && !data?.heading && !pageTitle) return null;
 
   return (
@@ -21,7 +21,7 @@ export default function BreadcrumbContact({ data, pageTitle }: BreadcrumbContact
           <Image
             src={imgUrl}
             alt={data.heading ?? pageTitle ?? "Breadcrumb background"}
-            fill
+            fill 
             style={{ objectFit: "cover" }}
             priority
           />

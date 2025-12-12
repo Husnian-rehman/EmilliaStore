@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
         <div className="flex-shrink-0">
           {logo && (
             <Link href="/">
-              <Image src={urlForImage(logo).url()} alt="Logo" width={150} height={50} />
+              <Image src={urlForImage(logo).url()} alt="Logo" width={150} height={50} className="h-[36px]"/>
             </Link>
           )}
         </div>

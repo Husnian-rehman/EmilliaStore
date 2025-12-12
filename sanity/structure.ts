@@ -26,10 +26,12 @@ const structure: StructureResolver = (S) =>
             .title("Home Page Sections")
             .items([
                S.documentTypeListItem("banner").title("Banner"),
+                S.documentTypeListItem("marqueeBar").title("Marquee Bar"),
                 S.documentTypeListItem("cardSection").title("Card Section"),
                 S.documentTypeListItem("services").title("Services Section"),
                 S.documentTypeListItem("faqSection").title("FAQ Section"),
                 S.documentTypeListItem("aboutUsSection").title("About Us Section"),
+                S.documentTypeListItem("homeVideo").title("Home Page Video Section"),
             
             ])
         ),
@@ -54,6 +56,7 @@ const structure: StructureResolver = (S) =>
             .title("FAQ Page Sections")
             .items([
                S.documentTypeListItem("faqBreadcrumb").title("FAQ Breadcrumb Section"),
+                S.documentTypeListItem("faqPageSection").title("FAQ Page Content Section"),
             ])
         ),
 
@@ -112,6 +115,9 @@ const structure: StructureResolver = (S) =>
             "aboutUsSection",
             "aboutDetailSection",
             "faqBreadcrumb",
+            "homeVideo",
+            "faqPageSection",
+            "marqueeBar",
 
           ].includes(item.getId()!)
       ),

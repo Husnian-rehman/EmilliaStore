@@ -16,7 +16,7 @@ export const Footer: React.FC<FooterProps> = ({ data }) => {
           {/* Logo & Address */}
           <div className="space-y-6 flex flex-col items-center md:items-start text-center md:text-left">
             {data.logo && (
-              <img src={data.logo} alt="Footer Logo" className="h-12 w-auto" />
+              <img src={data.logo} alt="Footer Logo" className="h-[36px] w-auto" />
             )}
 
             <ul className="space-y-2">
