@@ -36,6 +36,17 @@ const structure: StructureResolver = (S) =>
             ])
         ),
 
+              // ===========Allproduct PAGE ==========
+        S.listItem()
+        .title("Collection Page")
+        .child(
+          S.list()
+            .title("Collection Page Sections")
+            .items([
+                S.documentTypeListItem("allProductsBreadcrumb").title("All Products Breadcrumb Section"),
+            ])
+        ),
+
         // ========== About PAGE ==========
       S.listItem()
         .title("About Page")
@@ -118,6 +129,7 @@ const structure: StructureResolver = (S) =>
             "homeVideo",
             "faqPageSection",
             "marqueeBar",
+            "allProductsBreadcrumb",
 
           ].includes(item.getId()!)
       ),

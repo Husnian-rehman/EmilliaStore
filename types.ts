@@ -88,7 +88,11 @@ export interface WishlistBreadcrumbType {
   heading: string;
   image: any; 
 }
-
+// allproductsBreadcrumb.types.ts
+export interface AllProductsBreadcrumbType {
+  heading: string;
+  image: string;
+}
 
 
 // cardsection.types.ts

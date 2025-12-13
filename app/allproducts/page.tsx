@@ -1,17 +1,21 @@
 
-
+import BreadcrumbContact from "../../component/BreadcrumbContact";
+import { getAllProductsBreadcrumb } from "../../sanity/queries/allproducts/getAllProductsBreadcrumb";
 import { getAllProducts } from "@/lib/shopify";
 import Image from "next/image";
 import Link from "next/link"; // <-- Import Link
 
 export default async function AllProductsPage() {
+  const breadcrumb = await getAllProductsBreadcrumb();
   const products = await getAllProducts();
 
   return (
     <main>
+      {/* allproductbreadcrumb */}
+      <BreadcrumbContact data={breadcrumb} pageTitle="Collection" />
       {/* all products section */}
       <section>
-        <div className="max-w-[1500px] mx-auto pt-40 pb-20 flex gap-3 px-5">
+        <div className="max-w-[1500px] mx-auto pt-20 pb-20 flex gap-3 px-5">
           {/* filtersidebar */}
           <div className="max-w-[250px] w-full sticky top-40 h-full self-start border p-6 rounded-lg">
             <h2 className="text-2xl font-bold mb-4">Filters</h2>

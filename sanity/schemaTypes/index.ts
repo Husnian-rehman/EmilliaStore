@@ -18,9 +18,10 @@ import faqBreadcrumb from './faq/faqBreadcrumb'
 import homeVideo from './video'
 import faqPageSection from './faq/faqPageSection'
 import marqueeBar from './marqueeBar'
+import allProductsBreadcrumb from './allproducts/allProductsBreadcrumb'
 
 
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [contact, marqueeBar, faqPageSection, homeVideo,  aboutDetailSection, aboutUsSection, aboutbreadcrumb,aboutbanner, popup, header, footer, banner, breadcrumbcontact, cartBreadcrumb, wishlistBreadcrumb, cardSection, faqSection,  faqBreadcrumb, services,], 
+  types: [contact, marqueeBar, faqPageSection, homeVideo,  aboutDetailSection, aboutUsSection, aboutbreadcrumb,aboutbanner, allProductsBreadcrumb, popup, header, footer, banner, breadcrumbcontact, cartBreadcrumb, wishlistBreadcrumb, cardSection, faqSection,  faqBreadcrumb, services,], 
 }
