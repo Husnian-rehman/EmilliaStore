@@ -11,7 +11,6 @@ export default function Video({ data }: { data: VideoType }) {
       <div className="max-w-[1400px] mx-auto h-full">
        <video
         className="w-full h-full object-cover rounded-[20px]"
-        controls
         autoPlay
         muted
         loop
