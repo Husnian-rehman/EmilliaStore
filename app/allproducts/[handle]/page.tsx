@@ -5,8 +5,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ShopifyProduct } from "@/lib/shopify/types";
 
-export default async function ProductDetailPage({ params }: { params: { handle: string } }) {
-  const handle = params.handle;
+export default async function ProductDetailPage({ params }: { params: Promise<{ handle: string }> }) {
+  const { handle } = await params;
 
   const product = await getProductByHandle(handle);
 
@@ -17,7 +17,7 @@ export default async function ProductDetailPage({ params }: { params: { handle: 
   const selectedImage = product.featuredImage?.url || "";
 
   return (
-    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div className="max-w-6xl pt-[150px] mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
       
       {/* Left: Images */}
       <div className="flex flex-col gap-4">
@@ -66,10 +66,10 @@ export default async function ProductDetailPage({ params }: { params: { handle: 
         </div>
 
         {/* Variants (Size / Color placeholder) */}
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="flex flex-col gap-5 mt-4">
           <div>
-            <h3 className="font-medium">Available Size</h3>
-            <div className="flex gap-2 mt-1">
+            <h3 className="font-[600]">Size</h3>
+            <div className="flex gap-2 mt-2">
               {["S", "M", "L"].map((size) => (
                 <button
                   key={size}
@@ -82,8 +82,8 @@ export default async function ProductDetailPage({ params }: { params: { handle: 
           </div>
 
           <div>
-            <h3 className="font-medium">Available Color</h3>
-            <div className="flex gap-2 mt-1">
+            <h3 className="font-[600]">Color</h3>
+            <div className="flex gap-2 mt-3">
               {["black", "gray"].map((color) => (
                 <button
                   key={color}
@@ -111,7 +111,7 @@ export default async function ProductDetailPage({ params }: { params: { handle: 
 
         {/* Description */}
         <div className="mt-6">
-          <h3 className="font-medium mb-1">Description</h3>
+          <h3 className="font-[600] mb-2d">Description</h3>
           <div dangerouslySetInnerHTML={{ __html: product.description || '' }} />
         </div>
       </div>

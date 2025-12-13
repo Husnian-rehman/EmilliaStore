@@ -10,7 +10,7 @@ export async function shopifyFetch({ query, variables = {} }: any) {
     throw new Error("Shopify environment variables not configured (SHOPIFY_STORE_DOMAIN / SHOPIFY_STOREFRONT_ACCESS_TOKEN)");
   }
 
-  const result = await fetch(`https://${domain}/api/2024-04/graphql.json`, {
+  const result = await fetch(`https://${domain}/api/2023-10/graphql.json`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,8 +23,9 @@ export async function shopifyFetch({ query, variables = {} }: any) {
 
   // Throw on GraphQL errors so calling code fails loudly (helpful while debugging)
   if (json.errors) {
-    console.error("❌ Shopify GraphQL Errors:", json.errors);
-    throw new Error("Shopify GraphQL error - see server logs");
+    console.error("❌ Shopify GraphQL Errors:", JSON.stringify(json.errors, null, 2));
+    console.error("❌ Full response:", JSON.stringify(json, null, 2));
+    throw new Error(`Shopify GraphQL error: ${json.errors.map((e: any) => e.message).join(', ')}`);
   }
 
   if (!json.data) {
