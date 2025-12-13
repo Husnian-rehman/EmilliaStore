@@ -119,7 +119,9 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
                               </ul>
                                {/* product card */}
                               {section.featuredProduct?.image && (
+                                 
                                 <div className="mt-2 flex flex-col items-center">
+                                  <Link href={`/allproducts`} className="w-full">
                                   <Image
                                     src={urlForImage(section.featuredProduct.image).url()}
                                     alt={section.featuredProduct.title ?? ''}
@@ -127,11 +129,13 @@ export const Header: React.FC<HeaderProps> = ({ logo, menus = [], rightLinks = [
                                     height={120}
                                     className="object-cover w-full h-[350px] rounded mb-4"
                                   />
+                                     </Link>
                                  <div className='flex justify-between items-center w-full gap-3'>
                                    <p className="text-[20px] font-semibold ">{section.featuredProduct.title}</p>
                                   <p className="text-sm text-gray-500">${section.featuredProduct.price}</p>
                                  </div>
                                 </div>
+                             
                               )}
                             </div>
                           ))}
