@@ -3,6 +3,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { ShopifyProduct, ShopifyVariant } from "@/lib/shopify/types";
+import CheckoutButton from "@/component/CheckoutButton";
+import AddToCartButton from "@/component/AddToCartButton";
+import { useRouter } from "next/navigation";
+import { addItem } from "@/lib/cart";
 
 export default function ProductDetailClient({ product }: { product: ShopifyProduct }) {
   const initialImage = product.featuredImage?.url || product.images?.[0]?.url || "";
@@ -195,7 +199,7 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
                           <button
                             key={value}
                             onClick={handleClick}
-                            className={`w-8 h-8 rounded-full border ${isSelected ? "ring-2 ring-black" : ""}`}
+                            className={`w-8 h-8 rounded-full cursor-pointer border ${isSelected ? "ring-2 ring-black" : ""}`}
                             style={{ backgroundColor: styleColor }}
                             aria-label={`${optionName}: ${value}`}
                           />
@@ -208,7 +212,7 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
                           <button
                             key={value}
                             onClick={handleClick}
-                            className={`w-16 h-8 rounded-md overflow-hidden bg-center bg-cover relative ${isSelected ? "ring-1 ring-black" : ""}`}
+                            className={`w-16 h-8 rounded-md cursor-pointer overflow-hidden bg-center bg-cover relative ${isSelected ? "ring-1 ring-black" : ""}`}
                             // style={{ backgroundImage: `url(${valueImage})` }}
                             aria-label={`${optionName}: ${value}`}
                           >
@@ -221,7 +225,7 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
                         <button
                           key={value}
                           onClick={handleClick}
-                          className={`border px-3 py-1 rounded-md hover:border-black text-black ${isSelected ? "bg-gray-200" : "bg-white"}`}
+                          className={`border px-3 py-1 cursor-pointer rounded-md hover:border-black text-black ${isSelected ? "bg-gray-200" : "bg-white"}`}
                         >
                           {value}
                         </button>
@@ -235,20 +239,23 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
         </div>
 
         {selectedVariantId ? (
-          <form action="/api/cart" method="POST" className="mt-4">
-            <input type="hidden" name="variantId" value={selectedVariantId} />
-            <input type="hidden" name="quantity" value="1" />
-            <button type="submit" className="bg-black text-white px-6 py-2 rounded-md">
-              Add to Cart
-            </button>
-          </form>
+          <div className="mt-4 flex gap-3">
+            <AddToCartButton
+              variantId={selectedVariantId}
+              title={product.title}
+              price={product.price}
+              image={selectedImage || product.featuredImage?.url}
+              handle={(product as any).handle}
+            />
+            <CheckoutButton variantId={selectedVariantId} quantity={1} />
+          </div>
         ) : (
           <div className="mt-4 text-gray-500">This product is not available for purchase.</div>
         )}
 
         <div className="mt-6">
-          <h3 className="font-[600] mb-2d">Description</h3>
-          <div dangerouslySetInnerHTML={{ __html: product.description || "" }} />
+          <h3 className="font-[600] mb-3 text-[18px]">Description</h3>
+          <div dangerouslySetInnerHTML={{ __html: product.description || "" }} className="text-[14 px] text-gray-600" />
         </div>
       </div>
     </div>

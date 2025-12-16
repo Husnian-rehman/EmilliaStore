@@ -4,6 +4,8 @@ import { getAllProductsBreadcrumb } from "../../sanity/queries/allproducts/getAl
 import { getAllProducts } from "@/lib/shopify";
 import Image from "next/image";
 import Link from "next/link"; // <-- Import Link
+import AddToCartButton from "../../component/AddToCartButton";
+import CheckoutButton from "../../component/CheckoutButton";
 
 export default async function AllProductsPage() {
   const breadcrumb = await getAllProductsBreadcrumb();
@@ -72,13 +74,26 @@ export default async function AllProductsPage() {
                     </span>
                   )}
                 </div>
+                
+                
+                  <div className="mt-4 flex gap-2">
+                    <AddToCartButton
+                      variantId={product.variantId}
+                      title={product.title}
+                      price={product.price}
+                      image={product.featuredImage?.url || "/placeholder.png"}
+                      handle={product.handle}
+                    />
+                    <CheckoutButton variantId={product.variantId} quantity={1} />
+                  </div>
 
-                <form action="/cart" method="POST">
+
+                {/* <form action="/cart" method="POST">
                   <input type="hidden" name="variantId" value={product.variantId} />
                   <button className="w-full bg-black text-white py-2 rounded-md">
                     Add to Cart
                   </button>
-                </form>
+                </form> */}
 
               </div>
             ))}
