@@ -73,16 +73,33 @@ export async function getProductByHandle(handle: string): Promise<ShopifyProduct
   }
 
   const p = res.data.productByHandle;
-  const variant = p.variants.edges[0]?.node;
+
+  const variants = (p.variants?.edges || []).map((edge: any) => {
+    const v = edge.node;
+    return {
+      id: v.id,
+      title: v.title,
+      price: v.price?.amount ?? (v.price ?? null),
+      compareAtPrice: v.compareAtPrice?.amount ?? (v.compareAtPrice ?? null),
+      image: v.image ?? null,
+      selectedOptions: v.selectedOptions ?? [],
+    };
+  });
+
+  const images = (p.images?.edges || []).map((e: any) => e.node);
+
+  const featured = p.featuredImage || images[0] || null;
 
   return {
     id: p.id,
     title: p.title,
     handle: p.handle,
     description: p.description,
-    featuredImage: p.featuredImage,
-    variantId: variant?.id,
-    price: variant?.price.amount,
-    compareAtPrice: variant?.compareAtPrice?.amount || null,
+    featuredImage: featured,
+    images,
+    variants,
+    variantId: variants[0]?.id,
+    price: variants[0]?.price ?? null,
+    compareAtPrice: variants[0]?.compareAtPrice ?? null,
   };
 }

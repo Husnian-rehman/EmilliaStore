@@ -37,13 +37,29 @@ query getProduct($handle: String!) {
       url
       altText
     }
-    variants(first: 10) {
+    images(first: 20) {
+      edges {
+        node {
+          url
+          altText
+        }
+      }
+    }
+    variants(first: 50) {
       edges {
         node {
           id
           title
           price: priceV2 { amount }
           compareAtPrice: compareAtPriceV2 { amount }
+          image {
+            url
+            altText
+          }
+          selectedOptions {
+            name
+            value
+          }
         }
       }
     }

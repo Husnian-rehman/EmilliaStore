@@ -6,8 +6,10 @@ export interface ShopifyImage {
 export interface ShopifyVariant {
   id: string;
   title?: string;
-  price: { amount: string };
-  compareAtPrice?: { amount: string };
+  price: { amount: string } | string;
+  compareAtPrice?: { amount: string } | string;
+  image?: ShopifyImage;
+  selectedOptions?: { name: string; value: string }[];
 }
 
 export interface ShopifyProduct {
