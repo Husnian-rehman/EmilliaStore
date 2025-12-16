@@ -23,6 +23,16 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
     });
   });
 
+  // Remove Shopify's default "Title / Default Title" when it's not a real option
+  Object.keys(optionsMap).forEach((k) => {
+    const values = optionsMap[k] || [];
+    const isTitleKey = /^title$/i.test(k);
+    const onlyDefaultTitle = values.length === 1 && /^default\s*title$/i.test(String(values[0] || ""));
+    if (isTitleKey && onlyDefaultTitle) {
+      delete optionsMap[k];
+    }
+  });
+
   // Map option value -> image (use first variant image found for that value)
   const valueImageMap: Record<string, Record<string, string>> = {};
   (product.variants || []).forEach((v) => {
@@ -70,7 +80,11 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
     const first = product.variants?.[0];
     if (first?.selectedOptions) {
       const map: Record<string, string> = {};
-      first.selectedOptions.forEach((o) => (map[o.name] = o.value));
+      first.selectedOptions.forEach((o) => {
+        // skip default Title entries
+        if (/^title$/i.test(o.name) && /^default\s*title$/i.test(String(o.value || ""))) return;
+        map[o.name] = o.value;
+      });
       setSelectedOptions(map);
     } else {
       setSelectedOptions({});
@@ -166,77 +180,76 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
           {product.compareAtPrice && <span className="text-gray-400 line-through">${product.compareAtPrice}</span>}
         </div>
         
-        {/* options data get here */}
-        <div className="flex flex-col gap-5 mt-4">
-          <div>
-            {/* <h3 className="font-[600]">Options</h3> */}
-            <div className="flex flex-col gap-4 mt-3">
-              {Object.keys(optionsMap).length === 0 && <div>No variants</div>}
-              {Object.entries(optionsMap).map(([optionName, values]) => (
-                <div key={optionName}>
-                  <div className="font-[600] mb-2">{optionName}</div>
-                  <div className="flex gap-3 flex-wrap">
-                    {values.map((value) => {
-                      const isSelected = selectedOptions[optionName] === value;
-                      const optionIsColorName = isColorOptionName(optionName);
-                      const valueLooksColor = looksLikeColor(value);
-                      const isColor = optionIsColorName || valueLooksColor;
-                      const valueImage = getVariantImageForOption(optionName, value);
+        {/* options data — show only when product has option groups */}
+        {Object.keys(optionsMap).length > 0 && (
+          <div className="flex flex-col gap-5 mt-4">
+            <div>
+              <div className="flex flex-col gap-4 mt-3">
+                {Object.entries(optionsMap).map(([optionName, values]) => (
+                  <div key={optionName}>
+                    <div className="font-[600] mb-2">{optionName}</div>
+                    <div className="flex gap-3 flex-wrap">
+                      {values.map((value) => {
+                        const isSelected = selectedOptions[optionName] === value;
+                        const optionIsColorName = isColorOptionName(optionName);
+                        const valueLooksColor = looksLikeColor(value);
+                        const isColor = optionIsColorName || valueLooksColor;
+                        const valueImage = getVariantImageForOption(optionName, value);
 
-                      const handleClick = () => {
-                        const newSelected = { ...selectedOptions, [optionName]: value };
-                        setSelectedOptions(newSelected);
-                        const matched = findVariantByOptions(newSelected);
-                        if (matched) {
-                          setSelectedVariantId(matched.id);
-                          if ((matched.image as any)?.url) setSelectedImage((matched.image as any).url);
+                        const handleClick = () => {
+                          const newSelected = { ...selectedOptions, [optionName]: value };
+                          setSelectedOptions(newSelected);
+                          const matched = findVariantByOptions(newSelected);
+                          if (matched) {
+                            setSelectedVariantId(matched.id);
+                            if ((matched.image as any)?.url) setSelectedImage((matched.image as any).url);
+                          }
+                        };
+
+                        if (isColor) {
+                          const styleColor = valueLooksColor ? value : (namedColorToHex[value.toLowerCase()] || value);
+                          return (
+                            <button
+                              key={value}
+                              onClick={handleClick}
+                              className={`w-8 h-8 rounded-full cursor-pointer border ${isSelected ? "ring-2 ring-black" : ""}`}
+                              style={{ backgroundColor: styleColor }}
+                              aria-label={`${optionName}: ${value}`}
+                            />
+                          );
                         }
-                      };
 
-                      if (isColor) {
-                        const styleColor = valueLooksColor ? value : (namedColorToHex[value.toLowerCase()] || value);
+                        // If a value image exists (for non-color options), render it as the background
+                        if (!isColor && valueImage) {
+                          return (
+                            <button
+                              key={value}
+                              onClick={handleClick}
+                              className={`w-16 h-8 rounded-md cursor-pointer overflow-hidden bg-center bg-cover relative ${isSelected ? "ring-1 ring-black" : ""}`}
+                              aria-label={`${optionName}: ${value}`}
+                            >
+                              <span className=" px-2 h-full inset-0 flex items-center justify-center  text-xs font-medium text-white bg-gray-400 backdrop-blur-sm">{value}</span>
+                            </button>
+                          );
+                        }
+
                         return (
                           <button
                             key={value}
                             onClick={handleClick}
-                            className={`w-8 h-8 rounded-full cursor-pointer border ${isSelected ? "ring-2 ring-black" : ""}`}
-                            style={{ backgroundColor: styleColor }}
-                            aria-label={`${optionName}: ${value}`}
-                          />
-                        );
-                      }
-
-                      // If a value image exists (for non-color options), render it as the background
-                      if (!isColor && valueImage) {
-                        return (
-                          <button
-                            key={value}
-                            onClick={handleClick}
-                            className={`w-16 h-8 rounded-md cursor-pointer overflow-hidden bg-center bg-cover relative ${isSelected ? "ring-1 ring-black" : ""}`}
-                            // style={{ backgroundImage: `url(${valueImage})` }}
-                            aria-label={`${optionName}: ${value}`}
+                            className={`border px-3 py-1 cursor-pointer rounded-md hover:border-black text-black ${isSelected ? "bg-gray-200" : "bg-white"}`}
                           >
-                            <span className=" px-2 h-full inset-0 flex items-center justify-center  text-xs font-medium text-white bg-gray-400 backdrop-blur-sm">{value}</span>
+                            {value}
                           </button>
                         );
-                      }
-
-                      return (
-                        <button
-                          key={value}
-                          onClick={handleClick}
-                          className={`border px-3 py-1 cursor-pointer rounded-md hover:border-black text-black ${isSelected ? "bg-gray-200" : "bg-white"}`}
-                        >
-                          {value}
-                        </button>
-                      );
-                    })}
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {selectedVariantId ? (
           <div className="mt-4 flex gap-3">
