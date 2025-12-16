@@ -32,7 +32,7 @@ const structure: StructureResolver = (S) =>
                 S.documentTypeListItem("faqSection").title("FAQ Section"),
                 S.documentTypeListItem("aboutUsSection").title("About Us Section"),
                 S.documentTypeListItem("homeVideo").title("Home Page Video Section"),
-            
+                S.documentTypeListItem("collectionSection").title("Collection Section"),
             ])
         ),
 
@@ -44,6 +44,7 @@ const structure: StructureResolver = (S) =>
             .title("Collection Page Sections")
             .items([
                 S.documentTypeListItem("allProductsBreadcrumb").title("All Products Breadcrumb Section"),
+                 
             ])
         ),
 
@@ -130,6 +131,7 @@ const structure: StructureResolver = (S) =>
             "faqPageSection",
             "marqueeBar",
             "allProductsBreadcrumb",
+            "collectionSection",
 
           ].includes(item.getId()!)
       ),

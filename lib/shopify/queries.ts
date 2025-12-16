@@ -66,3 +66,46 @@ query getProduct($handle: String!) {
   }
 }
 `;
+
+export const GET_PRODUCTS_BY_COLLECTION_QUERY = `
+query productsByCollection($handle: String!) {
+  collectionByHandle(handle: $handle) {
+    title
+    products(first: 100) {
+      edges {
+        node {
+          id
+          title
+          handle
+          featuredImage {
+            url
+            altText
+          }
+          variants(first: 1) {
+            edges {
+              node {
+                id
+                price: priceV2 { amount }
+                compareAtPrice: compareAtPriceV2 { amount }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
+export const GET_ALL_COLLECTIONS_QUERY = `
+{
+  collections(first: 250) {
+    edges {
+      node {
+        handle
+        title
+      }
+    }
+  }
+}
+`;

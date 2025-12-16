@@ -5,19 +5,16 @@ import Services from "../component/Services"; // default import
 import AboutUs from "../component/AboutUs";
 import { getAboutUs } from "../sanity/queries/getAboutUs";
 import Video from "../component/Video";
-
 import { sanityClient } from "@/lib/sanity";
 import { BannerType, CardSectionType, FAQSection, ServicesType } from "@/types";
-
 import { getCardSection } from "@/sanity/queries/getCardSection";
 import { getAllFAQSectionsQuery } from "@/sanity/queries/faqQueries";
-
 import { getServices } from "@/sanity/queries/getServices"; // ⬅ NEW
-
 import { getVideo } from "@/sanity/queries/getVideo";
-
 import { getMarqueeBar } from "@/sanity/queries/getMarqueeBar";
 import MarqueeBar from "../component/MarqueeBar";
+import CollectionSection from "../component/CollectionSection";
+import { getCollectionSection } from "@/sanity/queries/getCollectionSection";
 
 
 export default async function Home() {
@@ -41,11 +38,24 @@ export default async function Home() {
 
   // Fetch Video Data
    const videoData = await getVideo();
+  // Fetch Collection section configured in Sanity
+  const collectionSection = await getCollectionSection();
+  console.info("Sanity collectionSection:", collectionSection);
+  // Debug: log collectionSection to help verify collectionHandle value
+  console.log("Sanity collectionSection:", collectionSection);
   return (
     <main>
       {/* Banner Slider */}
       <BannerSlider banners={banners} />
        <MarqueeBar data={marquee} />
+       {/* Featured collection section from Sanity */}
+      {collectionSection?.collectionHandle && (
+        <CollectionSection
+          collectionHandle={collectionSection.collectionHandle}
+          title={collectionSection.title}
+          description={collectionSection.description}
+        />
+      )}
       {/* Card Section */}
       {cardSection && (
         <CardSection
@@ -62,6 +72,7 @@ export default async function Home() {
           description={services.description}
         />
       )}
+      
       {/* about us  */}
        <AboutUs data={aboutSection} />
 

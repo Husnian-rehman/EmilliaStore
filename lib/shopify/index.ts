@@ -1,5 +1,6 @@
 // lib/shopify/index.ts
 import { GET_ALL_PRODUCTS_QUERY, GET_PRODUCT_BY_HANDLE_QUERY } from "./queries";
+import { GET_PRODUCTS_BY_COLLECTION_QUERY, GET_ALL_COLLECTIONS_QUERY } from "./queries";
 import { ShopifyProduct } from "./types";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN!;
@@ -46,6 +47,73 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
   }
 
   return res.data.products.edges.map((edge: any) => {
+    const p = edge.node;
+    const variant = p.variants.edges[0]?.node;
+
+    return {
+      id: p.id,
+      title: p.title,
+      handle: p.handle,
+      featuredImage: p.featuredImage,
+      variantId: variant?.id,
+      price: variant?.price.amount,
+      compareAtPrice: variant?.compareAtPrice?.amount || null,
+    };
+  });
+}
+
+export async function getProductsByCollection(handle: string): Promise<ShopifyProduct[]> {
+  if (!handle) {
+    console.warn("getProductsByCollection called without a collection handle");
+    return [];
+  }
+
+  const variables = { handle };
+  // first attempt: direct collectionByHandle
+  let res = await shopifyFetch({ query: GET_PRODUCTS_BY_COLLECTION_QUERY, variables });
+
+  // If not found, try slugifying the provided value (common case: Sanity stores title instead of handle)
+  if (!res.data || !res.data.collectionByHandle) {
+    const tryHandle = String(handle || "").trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
+    if (tryHandle && tryHandle !== handle) {
+      try {
+        console.info(`getProductsByCollection: retrying with slugified handle: ${tryHandle}`);
+        res = await shopifyFetch({ query: GET_PRODUCTS_BY_COLLECTION_QUERY, variables: { handle: tryHandle } });
+      } catch (e) {
+        console.warn("getProductsByCollection: slugified retry failed", e);
+      }
+    }
+  }
+
+  // If still not found, fetch all collections and attempt to match by title (case-insensitive)
+  if (!res.data || !res.data.collectionByHandle) {
+    try {
+      console.info("getProductsByCollection: collectionByHandle not found, fetching collection list to match by title...");
+      const listRes = await shopifyFetch({ query: GET_ALL_COLLECTIONS_QUERY });
+      const collections = listRes.data?.collections?.edges?.map((e: any) => e.node) || [];
+      const found = collections.find((c: any) => String(c.title || "").trim().toLowerCase() === String(handle || "").trim().toLowerCase());
+      if (found && found.handle) {
+        console.info(`getProductsByCollection: matched collection title -> handle: ${found.title} -> ${found.handle}`);
+        res = await shopifyFetch({ query: GET_PRODUCTS_BY_COLLECTION_QUERY, variables: { handle: found.handle } });
+      }
+    } catch (e) {
+      console.warn("getProductsByCollection: fallback title-match failed", e);
+    }
+  }
+
+  if (!res.data || !res.data.collectionByHandle) {
+    // Provide more context for debugging: variables and partial response
+    try {
+      console.error("❌ Collection not found or invalid Shopify data. variables:", variables, "response:", JSON.stringify(res));
+    } catch (e) {
+      console.error("❌ Collection not found. variables:", variables, "response object:", res);
+    }
+    return [];
+  }
+
+  const products = res.data.collectionByHandle.products?.edges || [];
+
+  return products.map((edge: any) => {
     const p = edge.node;
     const variant = p.variants.edges[0]?.node;
 

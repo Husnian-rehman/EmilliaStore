@@ -260,3 +260,10 @@ export interface MarqueeBarType {
   items: MarqueeItem[];
   speed?: number; // seconds it takes to scroll one full cycle (optional)
 }
+
+// Collection section type for frontpage sections
+export interface CollectionSectionType {
+  title?: string;
+  collectionHandle: string;
+}
+                             
