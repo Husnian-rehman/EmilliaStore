@@ -48,14 +48,7 @@ export default async function Home() {
       {/* Banner Slider */}
       <BannerSlider banners={banners} />
        <MarqueeBar data={marquee} />
-       {/* Featured collection section from Sanity */}
-      {collectionSection?.collectionHandle && (
-        <CollectionSection
-          collectionHandle={collectionSection.collectionHandle}
-          title={collectionSection.title}
-          description={collectionSection.description}
-        />
-      )}
+    
       {/* Card Section */}
       {cardSection && (
         <CardSection
@@ -63,7 +56,14 @@ export default async function Home() {
           cards={cardSection.cards}
         />
       )}
-
+        {/* Featured collection section from Sanity */}
+      {collectionSection?.collectionHandle && (
+        <CollectionSection
+          collectionHandle={collectionSection.collectionHandle}
+          title={collectionSection.title}
+          description={collectionSection.description}
+        />
+      )}
       {/* ✔ Services Section Added Here */}
       {services && (
         <Services
