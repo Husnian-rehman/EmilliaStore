@@ -23,4 +23,5 @@ export interface ShopifyProduct {
   price: string;
   compareAtPrice?: string | null;
   variants?: ShopifyVariant[];
+  tags?: string[];
 }

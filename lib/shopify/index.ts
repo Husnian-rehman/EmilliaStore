@@ -1,5 +1,5 @@
 // lib/shopify/index.ts
-import { GET_ALL_PRODUCTS_QUERY, GET_PRODUCT_BY_HANDLE_QUERY } from "./queries";
+import { GET_ALL_PRODUCTS_QUERY, GET_PRODUCT_BY_HANDLE_QUERY, GET_ALL_PRODUCT_TAGS_QUERY } from "./queries";
 import { GET_PRODUCTS_BY_COLLECTION_QUERY, GET_ALL_COLLECTIONS_QUERY } from "./queries";
 import { ShopifyProduct } from "./types";
 
@@ -55,6 +55,7 @@ export async function getAllProducts(): Promise<ShopifyProduct[]> {
       title: p.title,
       handle: p.handle,
       featuredImage: p.featuredImage,
+        tags: p.tags || [],
       variantId: variant?.id,
       price: variant?.price.amount,
       compareAtPrice: variant?.compareAtPrice?.amount || null,
@@ -122,11 +123,38 @@ export async function getProductsByCollection(handle: string): Promise<ShopifyPr
       title: p.title,
       handle: p.handle,
       featuredImage: p.featuredImage,
+      tags: p.tags || [],
       variantId: variant?.id,
       price: variant?.price.amount,
       compareAtPrice: variant?.compareAtPrice?.amount || null,
     };
   });
+}
+
+export async function getAllCollections(): Promise<{ handle: string; title: string }[]> {
+  try {
+    const res = await shopifyFetch({ query: GET_ALL_COLLECTIONS_QUERY });
+    const collections = res.data?.collections?.edges?.map((e: any) => e.node) || [];
+    return collections.map((c: any) => ({ handle: c.handle, title: c.title }));
+  } catch (e) {
+    console.error('getAllCollections failed', e);
+    return [];
+  }
+}
+
+export async function getAllProductTags(): Promise<string[]> {
+  try {
+    const res = await shopifyFetch({ query: GET_ALL_PRODUCT_TAGS_QUERY });
+    const products = res.data?.products?.edges?.map((e: any) => e.node) || [];
+    const tagsSet = new Set<string>();
+    products.forEach((p: any) => {
+      (p.tags || []).forEach((t: string) => tagsSet.add(t));
+    });
+    return Array.from(tagsSet).sort();
+  } catch (e) {
+    console.error('getAllProductTags failed', e);
+    return [];
+  }
 }
 
 export async function getProductByHandle(handle: string): Promise<ShopifyProduct | null> {

@@ -6,6 +6,7 @@ export const GET_ALL_PRODUCTS_QUERY = `
           id
           title
           handle
+          tags
           featuredImage {
             url
             altText
@@ -77,6 +78,7 @@ query productsByCollection($handle: String!) {
           id
           title
           handle
+          tags
           featuredImage {
             url
             altText
@@ -104,6 +106,18 @@ export const GET_ALL_COLLECTIONS_QUERY = `
       node {
         handle
         title
+      }
+    }
+  }
+}
+`;
+
+export const GET_ALL_PRODUCT_TAGS_QUERY = `
+{
+  products(first: 250) {
+    edges {
+      node {
+        tags
       }
     }
   }
