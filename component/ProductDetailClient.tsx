@@ -73,14 +73,17 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
   };
 
   useEffect(() => {
-    setSelectedImage(product.featuredImage?.url || product.images?.[0]?.url || "");
-    setSelectedVariantId(product.variantId || product.variants?.[0]?.id);
-    // initialize selectedOptions from first variant
-    const first = product.variants?.[0];
-    if (first?.selectedOptions) {
+    // prefer variant image when available, otherwise fallback to product featured/image
+    const initialVariant = (product.variants || []).find((v) => v.id === product.variantId) || product.variants?.[0];
+    const variantImage = initialVariant && (initialVariant.image as any)?.url;
+    const fallbackImage = product.featuredImage?.url || product.images?.[0]?.url || "";
+    setSelectedImage(variantImage || fallbackImage);
+    setSelectedVariantId(initialVariant?.id || undefined);
+
+    // initialize selectedOptions from initial variant (skip default Title)
+    if (initialVariant?.selectedOptions) {
       const map: Record<string, string> = {};
-      first.selectedOptions.forEach((o) => {
-        // skip default Title entries
+      initialVariant.selectedOptions.forEach((o) => {
         if (/^title$/i.test(o.name) && /^default\s*title$/i.test(String(o.value || ""))) return;
         map[o.name] = o.value;
       });
@@ -96,7 +99,9 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
     (variant.selectedOptions || []).forEach((o) => (map[o.name] = o.value));
     setSelectedOptions((prev) => ({ ...prev, ...map }));
     setSelectedVariantId(variant.id);
-    if (variant.image && (variant.image as any).url) setSelectedImage((variant.image as any).url);
+    const vImg = (variant.image as any)?.url;
+    const fallback = product.featuredImage?.url || product.images?.[0]?.url || "";
+    setSelectedImage(vImg || fallback);
   };
 
   const getColorValue = (variant: ShopifyVariant) => {
@@ -201,7 +206,9 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
                           const matched = findVariantByOptions(newSelected);
                           if (matched) {
                             setSelectedVariantId(matched.id);
-                            if ((matched.image as any)?.url) setSelectedImage((matched.image as any).url);
+                            const vImg = (matched.image as any)?.url;
+                            const fallback = product.featuredImage?.url || product.images?.[0]?.url || "";
+                            setSelectedImage(vImg || fallback);
                           }
                         };
 
