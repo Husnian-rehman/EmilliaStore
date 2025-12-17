@@ -39,8 +39,15 @@ export default function CartClient() {
               <div className="w-20 h-20 bg-gray-100 flex items-center justify-center">No image</div>
             )}
             <div className="flex-1">
-              <div className="font-[600] text-[16px]">{it.title}</div>
-              <div className="text-sm text-gray-600">Qty: {it.quantity}</div>
+              <div className="flex items-center gap-3">
+                <div className="font-[600] text-[16px]">
+                  {it.title}
+                    {it.selectedOptions && Object.keys(it.selectedOptions).length > 0 && (
+                    <span className="text-sm text-gray-600 ml-4 "> ---{Object.values(it.selectedOptions).join(' / ')}</span>
+                  )}
+                </div>
+              </div>
+              <div className="text-sm text-gray-600 font-[600]">Qty: {it.quantity}</div>
             </div>
             <div className="text-right">
               <div className="font-semibold">${it.price}</div>

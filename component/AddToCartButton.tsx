@@ -10,18 +10,20 @@ export default function AddToCartButton({
   price,
   image,
   handle,
+  selectedOptions,
 }: {
   variantId: string;
   title: string;
   price?: string | number;
   image?: string;
   handle?: string;
+  selectedOptions?: Record<string, string>;
 }) {
   const router = useRouter();
 
   const onAdd = () => {
     try {
-      addItem({ variantId, title, price, image, quantity: 1, handle });
+      addItem({ variantId, title, price, image, quantity: 1, handle, selectedOptions });
     } catch (e) {
       console.error("Failed to add to cart", e);
     }

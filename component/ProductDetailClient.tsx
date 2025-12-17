@@ -6,7 +6,6 @@ import { ShopifyProduct, ShopifyVariant } from "@/lib/shopify/types";
 import CheckoutButton from "@/component/CheckoutButton";
 import AddToCartButton from "@/component/AddToCartButton";
 import { useRouter } from "next/navigation";
-import { addItem } from "@/lib/cart";
 
 export default function ProductDetailClient({ product }: { product: ShopifyProduct }) {
   const initialImage = product.featuredImage?.url || product.images?.[0]?.url || "";
@@ -259,8 +258,15 @@ export default function ProductDetailClient({ product }: { product: ShopifyProdu
               price={product.price}
               image={selectedImage || product.featuredImage?.url}
               handle={(product as any).handle}
+              selectedOptions={selectedOptions}
             />
-            <CheckoutButton variantId={selectedVariantId} quantity={1} />
+            <CheckoutButton
+              variantId={selectedVariantId}
+              quantity={1}
+              title={product.title}
+              image={selectedImage || product.featuredImage?.url}
+              selectedOptions={selectedOptions}
+            />
           </div>
         ) : (
           <div className="mt-4 text-gray-500">This product is not available for purchase.</div>

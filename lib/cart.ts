@@ -5,6 +5,7 @@ export interface CartItem {
   image?: string;
   quantity: number;
   handle?: string;
+  selectedOptions?: Record<string, string>;
 }
 
 const KEY = "emilia_cart";

@@ -1,16 +1,22 @@
 "use client";
 
 import React from "react";
-import { getCart, getCheckoutUrl } from "@/lib/cart";
+import { getCart, getCheckoutUrl, addItem } from "@/lib/cart";
 
 export default function CheckoutButton({
   items,
   variantId,
   quantity = 1,
+  title,
+  image,
+  selectedOptions,
 }: {
   items?: any[];
   variantId?: string;
   quantity?: number;
+  title?: string;
+  image?: string;
+  selectedOptions?: Record<string, string>;
 }) {
   const handleCheckout = async () => {
     // Determine cart items (use passed items or local cart)
@@ -32,6 +38,13 @@ export default function CheckoutButton({
         alert('Checkout URL is not configured. Set NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN or SHOPIFY_STORE_DOMAIN in env.');
         return;
       }
+      // ensure the selected variant is present in the cart (so it's persisted for future)
+      try {
+        addItem({ variantId, title: title || "", price: undefined, image: image || undefined, quantity, handle: undefined, selectedOptions });
+      } catch (e) {
+        console.error("Failed to add selected variant to cart before checkout", e);
+      }
+
       const m = String(variantId).match(/(\d+)$/);
       const id = m ? m[1] : variantId;
       const url = `https://${domain}/cart/${id}:${quantity}`;
@@ -68,7 +81,17 @@ export default function CheckoutButton({
       return m ? m[1] : id;
     };
 
-    const parts = cartItems.map((it: any) => `${normalizeVariant(it.variantId)}:${it.quantity}`).join(',');
+    // If a variantId was provided but cart already has items, add the selected variant first
+    if (variantId) {
+      try {
+        addItem({ variantId, title: title || "", price: undefined, image: image || undefined, quantity, handle: undefined, selectedOptions });
+      } catch (e) {
+        console.error("Failed to add selected variant to cart before checkout", e);
+      }
+    }
+
+    const finalCart = getCart();
+    const parts = finalCart.map((it: any) => `${normalizeVariant(it.variantId)}:${it.quantity}`).join(',');
     const url = `https://${domain}/cart/${parts}`;
     window.location.href = url;
   };
